@@ -22,9 +22,8 @@ services:
       - ollama
     ports:
       - ${OPEN_WEBUI_PORT-3000}:8080
-    environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-      - 'WEBUI_SECRET_KEY='
+    env_file:
+      - .env  # ✅ This ensures `.env` is automatically loaded
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped

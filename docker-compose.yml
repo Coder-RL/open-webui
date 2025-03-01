@@ -1,0 +1,8 @@
+services:
+  openwebui:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=8192
+
