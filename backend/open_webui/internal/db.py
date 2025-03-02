@@ -25,7 +25,6 @@ from typing_extensions import Self
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["DB"])
 
-
 class JSONField(types.TypeDecorator):
     impl = types.Text
     cache_ok = True
@@ -51,10 +50,16 @@ class JSONField(types.TypeDecorator):
 # Workaround to handle the peewee migration
 # This is required to ensure the peewee migration is handled before the alembic migration
 def handle_peewee_migration(DATABASE_URL):
-    # db = None
+    db = None
     try:
+        # Ensure db is initialized before performing migration
         # Replace the postgresql:// with postgres:// to handle the peewee migration
         db = register_connection(DATABASE_URL.replace("postgresql://", "postgres://"))
+        
+        if db is None:
+            log.error("Failed to establish a connection with the database.")
+            raise Exception("Database connection failed.")
+        
         migrate_dir = OPEN_WEBUI_DIR / "internal" / "migrations"
         router = Router(db, logger=log, migrate_dir=migrate_dir)
         router.run()
@@ -69,9 +74,10 @@ def handle_peewee_migration(DATABASE_URL):
             db.close()
 
         # Assert if db connection has been closed
-        assert db.is_closed(), "Database connection is still open."
+        assert db is None or db.is_closed(), "Database connection is still open."
 
 
+# Ensure the migration function is executed to initialize the database
 handle_peewee_migration(DATABASE_URL)
 
 
@@ -114,3 +120,4 @@ def get_session():
 
 
 get_db = contextmanager(get_session)
+

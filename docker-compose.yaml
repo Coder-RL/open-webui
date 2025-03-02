@@ -21,7 +21,7 @@ services:
     depends_on:
       - ollama
     ports:
-      - ${OPEN_WEBUI_PORT-3000}:8080
+      - ${OPEN_WEBUI_PORT-3000}:3000
     env_file:
       - .env  # ✅ This ensures `.env` is automatically loaded
     extra_hosts:
