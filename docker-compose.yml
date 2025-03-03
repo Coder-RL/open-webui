@@ -16,8 +16,7 @@ services:
       - RAG_WEB_SEARCH_ENGINE=searxng
       - RAG_WEB_SEARCH_RESULT_COUNT=5
       - RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10
-      - GOOGLE_SEARCH_CX=c085eabc04ada4c46  # ✅ Google PSE Search Engine ID
-      - GOOGLE_API_KEY=AIzaSyBVq3MYKJlTM6roAGyw0sqH1eHG2QKX4HM  # ✅ Google API Key
+      - G # ✅ Google PSE Search Engine ID
     volumes:
       - ./backend:/app/backend
     networks:
